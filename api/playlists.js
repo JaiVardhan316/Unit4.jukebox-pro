@@ -9,6 +9,8 @@ import {
 } from "#db/queries/playlists";
 import { createPlaylistTrack } from "#db/queries/playlists_tracks";
 import { getTracksByPlaylistId } from "#db/queries/tracks";
+import requireUser from "#middleware/requireUser";
+
 
 router
   .route("/")
@@ -16,14 +18,14 @@ router
     const playlists = await getPlaylists();
     res.send(playlists);
   })
-  .post(async (req, res) => {
+  .post(requireUser, async (req, res) => {
     if (!req.body) return res.status(400).send("Request body is required.");
 
     const { name, description } = req.body;
     if (!name || !description)
       return res.status(400).send("Request body requires: name, description");
 
-    const playlist = await createPlaylist(name, description);
+    const playlist = await createPlaylist(name, description, req.user.id);
     res.status(201).send(playlist);
   });
 
