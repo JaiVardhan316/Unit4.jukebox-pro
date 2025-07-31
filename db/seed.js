@@ -12,11 +12,10 @@ await db.end();
 console.log("🌱 Database seeded.");
 
 async function seed() {
-  const testUser = await createUser();
+  const testUser = await createUser("testUser", "password123");
   const token = createToken({
     id: testUser.id
   })
-  console.log(createUser());
   console.log(token);
   // for (let i = 1; i <= 2; i++) {
   //   await createUser("User " + i, "abc" + i);
